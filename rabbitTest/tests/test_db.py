@@ -22,6 +22,6 @@ async def test_get_db_session():
     request_mock = MagicMock()
     request_mock.app.state.db_session_factory = lambda: AsyncSession()
 
-    session = get_db_session(request_mock).__anext__()
-    hello = await session
-    assert isinstance(hello, AsyncSession)
+    async for session in get_db_session(request_mock):
+        assert isinstance(session, AsyncSession)
+    assert session is not AsyncSession
